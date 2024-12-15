@@ -124,7 +124,7 @@
                 const remainingBags = totalBags - unloadBags;
                 const newTargetWeight = (expectedWeight - (remainingBags * (currentWeight / totalBags))) / unloadBags;
 
-                if (newTargetWeight >= 45 && newTargetWeight <= 56) {
+                if (newTargetWeight >= 40 && newTargetWeight <= 60) {
                     suggestions.push(`Unload ${unloadBags} bags. Adjust target weight to ${newTargetWeight.toFixed(2)} kg.`);
                 }
             }
