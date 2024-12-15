@@ -82,7 +82,7 @@
         </div>
         <div class="manual" id="manualContainer">
             <h2>Manual Adjustment</h2>
-            <label for="manualUnload">Enter number of bags to unload:</label>
+            <label for="manualUnload">Enter number of bags to unload (30-400):</label>
             <input type="number" id="manualUnload">
             <button onclick="manualAdjust()">Submit Manual Adjustment</button>
             <div id="manualResult" style="margin-top: 10px;"></div>
@@ -119,12 +119,10 @@
 
             let suggestions = [];
             for (const unloadBags of validUnloadOptions) {
-                if (unloadBags >= totalBags) break;
-
                 const remainingBags = totalBags - unloadBags;
                 const newTargetWeight = (expectedWeight - (remainingBags * (currentWeight / totalBags))) / unloadBags;
 
-                if (newTargetWeight >= 40 && newTargetWeight <= 60) {
+                if (newTargetWeight >= 45 && newTargetWeight <= 56) {
                     suggestions.push(`Unload ${unloadBags} bags. Adjust target weight to ${newTargetWeight.toFixed(2)} kg.`);
                 }
             }
@@ -145,8 +143,8 @@
             const expectedWeight = parseFloat(document.getElementById("expectedWeight").value);
             const manualUnload = parseInt(manualUnloadInput.value);
 
-            if (manualUnload >= totalBags || manualUnload % 50 !== 0) {
-                manualResult.innerHTML = "Invalid number of bags to unload. Ensure it is a multiple of 50 and less than total bags.";
+            if (manualUnload < 30 || manualUnload > 400) {
+                manualResult.innerHTML = "Invalid input. Enter a number between 30 and 400.";
                 return;
             }
 
