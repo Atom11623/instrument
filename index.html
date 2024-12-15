@@ -65,6 +65,13 @@
             border-radius: 5px;
             color: #721c24;
         }
+        .manual-input {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -88,6 +95,12 @@
             <p id="resultText"></p>
         </div>
 
+        <div id="manualContainer" class="manual-input" style="display: none;">
+            <h3>Enter Number of Bags to Unload:</h3>
+            <input type="number" id="manualUnloadBags" placeholder="Enter number of bags" min="0">
+            <button onclick="manualAdjustment()">Recalculate</button>
+        </div>
+
         <div id="errorContainer" class="error" style="display: none;">
             <h2>Error:</h2>
             <p id="errorText"></p>
@@ -105,10 +118,12 @@
             const resultText = document.getElementById('resultText');
             const errorContainer = document.getElementById('errorContainer');
             const errorText = document.getElementById('errorText');
+            const manualContainer = document.getElementById('manualContainer');
 
-            // Reset result and error containers
+            // Reset containers
             resultContainer.style.display = 'none';
             errorContainer.style.display = 'none';
+            manualContainer.style.display = 'none';
 
             // Validate inputs
             if (totalBags < 50) {
@@ -146,6 +161,28 @@
             }
 
             resultContainer.style.display = 'block';
+            manualContainer.style.display = 'block';
+        }
+
+        function manualAdjustment() {
+            const totalBags = parseInt(document.getElementById('total_bags').value);
+            const currentWeight = parseFloat(document.getElementById('current_weight').value);
+            const expectedWeight = parseFloat(document.getElementById('expected_weight').value);
+            const unloadBags = parseInt(document.getElementById('manualUnloadBags').value);
+
+            if (unloadBags <= 0 || unloadBags >= totalBags) {
+                alert('Please enter a valid number of bags to unload.');
+                return;
+            }
+
+            const remainingBags = totalBags - unloadBags;
+            const newTargetWeight = (expectedWeight - (remainingBags * (currentWeight / totalBags))) / unloadBags;
+
+            if (newTargetWeight >= 45 && newTargetWeight <= 56) {
+                alert(`New adjustment: Unload ${unloadBags} bags. Adjust target weight to ${newTargetWeight.toFixed(2)} kg.`);
+            } else {
+                alert('No valid adjustment found for the entered number of bags.');
+            }
         }
     </script>
 </body>
