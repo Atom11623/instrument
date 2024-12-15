@@ -126,18 +126,21 @@
             const adjustmentType = weightDifference < 0 ? 'underweight' : 'overweight';
             const absoluteDifference = Math.abs(weightDifference);
 
+            const validUnloadOptions = [50, 100, 150, 200, 250, 300, 350, 400];
             let suggestions = [];
-            for (let unloadBags = 50; unloadBags < totalBags; unloadBags += 50) {
+            for (const unloadBags of validUnloadOptions) {
+                if (unloadBags >= totalBags) break;
+
                 const remainingBags = totalBags - unloadBags;
                 const newTargetWeight = (expectedWeight - (remainingBags * (currentWeight / totalBags))) / unloadBags;
 
-                if (newTargetWeight >= 48 && newTargetWeight <= 53) {
+                if (newTargetWeight >= 45 && newTargetWeight <= 56) {
                     suggestions.push(`Unload ${unloadBags} bags. Adjust target weight to ${newTargetWeight.toFixed(2)} kg.`);
                 }
             }
 
             if (suggestions.length === 0) {
-                resultText.innerHTML = `The truck is ${adjustmentType} by ${absoluteDifference.toFixed(2)} kg. No valid adjustments found within the target weight range (48kg to 53kg).`;
+                resultText.innerHTML = `The truck is ${adjustmentType} by ${absoluteDifference.toFixed(2)} kg. No valid adjustments found within the target weight range (45kg to 56kg).`;
             } else {
                 resultText.innerHTML = `The truck is ${adjustmentType} by ${absoluteDifference.toFixed(2)} kg. Suggestions:<br>` + suggestions.join('<br>');
             }
