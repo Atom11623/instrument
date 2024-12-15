@@ -3,78 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cement Packing Balance</title>
+    <title>Dangote Cement Packing Plant Over and Under Weight Adjustment</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
             margin: 0;
             padding: 0;
         }
+
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 50px auto;
             padding: 20px;
             background: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
             text-align: center;
-            color: #333;
+            color: #007bff;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
         }
+
+        p {
+            text-align: center;
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
         form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
+
         label {
             font-weight: bold;
+            color: #555;
         }
+
         input {
-            padding: 10px;
+            padding: 12px;
             font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            background: #f9f9f9;
+            transition: all 0.3s;
         }
+
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+            background: #ffffff;
+        }
+
         button {
-            padding: 10px;
+            padding: 12px;
             font-size: 16px;
-            color: #fff;
+            color: #ffffff;
             background-color: #007bff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: all 0.3s;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         .result, .manual {
             margin-top: 20px;
-            padding: 15px;
-            background: #e9ecef;
+            padding: 20px;
+            background: #e9f5ff;
+            border: 1px solid #cfe5ff;
             border-radius: 5px;
             display: none;
         }
+
         .manual input {
             margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .manual button {
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .alert {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #ff0000;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #777;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Cement Packing Balance</h1>
+        <h1>Dangote Cement Packing Plant</h1>
+        <p>Over and Under Weight Target Weight Parameter Adjustment</p>
         <form id="balanceForm">
             <label for="totalBags">Total number of bags in the truck:</label>
-            <input type="number" id="totalBags" required>
+            <input type="number" id="totalBags" placeholder="Enter total bags in the truck" required>
 
             <label for="currentWeight">Current truck weight (kg):</label>
-            <input type="number" id="currentWeight" required>
+            <input type="number" id="currentWeight" placeholder="Enter current truck weight" required>
 
             <label for="expectedWeight">Expected truck weight (kg):</label>
-            <input type="number" id="expectedWeight" required>
+            <input type="number" id="expectedWeight" placeholder="Enter expected truck weight" required>
 
-            <button type="submit">Calculate</button>
+            <button type="submit">Calculate Adjustment</button>
         </form>
         <div class="result" id="resultContainer">
             <h2>Results:</h2>
@@ -83,11 +134,12 @@
         <div class="manual" id="manualContainer">
             <h2>Manual Adjustment</h2>
             <label for="manualUnload">Enter number of bags to unload (30-400):</label>
-            <input type="number" id="manualUnload">
+            <input type="number" id="manualUnload" placeholder="Enter number of bags">
             <button onclick="manualAdjust()">Submit Manual Adjustment</button>
             <div id="manualResult" style="margin-top: 10px;"></div>
         </div>
     </div>
+    <footer>&copy; 2024 Dangote Cement. All Rights Reserved.</footer>
 
     <script>
         const form = document.getElementById("balanceForm");
@@ -112,13 +164,8 @@
             const adjustmentType = weightDifference > 0 ? "overweight" : "underweight";
             const absoluteDifference = Math.abs(weightDifference);
 
-            const validUnloadOptions = [];
-            for (let i = 50; i <= 400; i += 50) {
-                validUnloadOptions.push(i);
-            }
-
             let suggestions = [];
-            for (const unloadBags of validUnloadOptions) {
+            for (let unloadBags = 50; unloadBags <= 400; unloadBags += 50) {
                 const remainingBags = totalBags - unloadBags;
                 const newTargetWeight = (expectedWeight - (remainingBags * (currentWeight / totalBags))) / unloadBags;
 
@@ -144,7 +191,7 @@
             const manualUnload = parseInt(manualUnloadInput.value);
 
             if (manualUnload < 30 || manualUnload > 400) {
-                manualResult.innerHTML = "Invalid input. Enter a number between 30 and 400.";
+                manualResult.innerHTML = `<span class="alert">Invalid input. Enter a number between 30 and 400.</span>`;
                 return;
             }
 
@@ -154,7 +201,7 @@
             if (newTargetWeight >= 45 && newTargetWeight <= 56) {
                 manualResult.innerHTML = `Unload ${manualUnload} bags. Adjust target weight to ${newTargetWeight.toFixed(2)} kg.`;
             } else {
-                manualResult.innerHTML = "Manual adjustment not valid. Target weight out of range (45kg to 56kg).";
+                manualResult.innerHTML = `<span class="alert">Manual adjustment not valid. Target weight out of range (45kg to 56kg).</span>`;
             }
         }
     </script>
